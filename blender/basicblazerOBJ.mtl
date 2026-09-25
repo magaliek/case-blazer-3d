@@ -6,8 +6,6 @@ Ks 0.075000 0.075000 0.075000
 Ns 28.763239
 illum 2
 d 1.000000
-map_Ka C:/Users/fulya/AppData/Local/CLO/CLO Standalone/18348/1027/Buttonhole_Eyelet_Square.png
-map_Kd C:/Users/fulya/AppData/Local/CLO/CLO Standalone/18348/1027/Buttonhole_Eyelet_Square.png
 newmtl Material500086
 Ka 0.030251 0.026217 0.025209
 Kd 0.117647 0.101961 0.098039
@@ -22,8 +20,6 @@ Ks 0.075000 0.075000 0.075000
 Ns 28.763239
 illum 2
 d 1.000000
-map_Ka C:/Users/fulya/AppData/Local/CLO/CLO Standalone/18348/1026/2.3mm_3_Edit.png
-map_Kd C:/Users/fulya/AppData/Local/CLO/CLO Standalone/18348/1026/2.3mm_3_Edit.png
 newmtl kruvaze_blazer_FRONT_2303
 Ka 0.257132 0.257132 0.257132
 Kd 1.000000 1.000000 1.000000
@@ -45,5 +41,3 @@ Ks 0.075000 0.075000 0.075000
 Ns 28.763239
 illum 2
 d 1.000000
-map_Ka C:/Users/fulya/AppData/Local/CLO/CLO Standalone/18348/1021/singstitch01.jpg
-map_Kd C:/Users/fulya/AppData/Local/CLO/CLO Standalone/18348/1021/singstitch01.jpg
