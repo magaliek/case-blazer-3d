@@ -36,7 +36,7 @@ case-blazer-3d/
   README.md     setup and how to run
   REPORT.md     part E
   blender/      .blend files and Python scripts
-  assets/       blazer.glb, textures/, buttons/
+  assets/       blazer.glb, textures/, buttons/, Fabrics/
   web/          configurator page
   video/        screen recording
   notes/        working logs used for the report

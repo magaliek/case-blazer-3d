@@ -145,3 +145,5 @@ vite.config.ts.timestamp-*
 # large raw files
 *.fbx
 *.obj
+*.blend1
+*.glb
