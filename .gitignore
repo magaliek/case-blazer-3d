@@ -146,4 +146,4 @@ vite.config.ts.timestamp-*
 *.fbx
 *.obj
 *.blend1
-*.glb
+*4.glb

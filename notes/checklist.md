@@ -5,12 +5,12 @@ Status: ☐ not started · ◐ in progress · ☑ done · ✗ skipped (say why i
 ## A – Base jacket
 | | Item | Type | Status | Notes |
 |---|---|---|---|---|
-| A1 | Blank template: classic collar, no pockets, no buttons, no mannequin | REQ | ☐ | |
-| A2 | Body, sleeves, collar, inside as separate named parts | REQ | ☐ | |
-| A3 | UVs at real scale, cm per tile documented | REQ | ☐ | |
-| A4 | Stripes run lengthwise on every panel | REQ | ☐ | |
-| A5 | Compressed .glb ≤ 15 MB, textures ≤ 2K | REQ | ☐ | |
-| A6 | Front slightly open state, lining visible | BONUS | ☐ | |
+| A1 | Blank template: classic collar, no pockets, no buttons, no mannequin | REQ | ☑ | Buttons and pockets removed by blazer_strip.py |
+| A2 | Body, sleeves, collar, inside as separate named parts | REQ | ☑ | body, collar, left_sleeve, right_sleeve, lining (confirmed in gltf-transform inspect) |
+| A3 | UVs at real scale, cm per tile documented | REQ | ☑ | 1 tile = 20 x 20 cm, assumed (ambientCG has no size), set by TILE_CM in UVs.py |
+| A4 | Stripes run lengthwise on every panel | REQ | ☑ | Custom projection, V always height. Checked front/side/back in Blender and in glTF viewer |
+| A5 | Compressed .glb ≤ 15 MB, textures ≤ 2K | REQ | ☑ | 4.28 MB, 2048 px, about 245k triangles. Lapel edges a bit ragged (see decisions) |
+| A6 | Front slightly open state, lining visible | BONUS | ☐ | Not started |
 
 ## B – Option parts
 | | Item | Type | Status | Notes |
@@ -21,7 +21,7 @@ Status: ☐ not started · ◐ in progress · ☑ done · ✗ skipped (say why i
 | B4 | 2-button closure, buttons + buttonholes placed right | REQ | ☐ | |
 | B5 | 3-button closure, buttons + buttonholes placed right | REQ | ☐ | |
 | B6 | Topstitching visible on added parts | REQ | ☐ | |
-| B7 | Lining covers inside, colour changeable | REQ | ☐ | |
+| B7 | Lining covers inside, colour changeable | REQ | ◐ | Lining is its own part with its own colour material (placeholder red). Colour switching not done yet |
 | B8 | Sleeve buttons (0/2/4) | BONUS | ☐ | |
 | B9 | Welt pocket | BONUS | ☐ | |
 | B10 | Butterfly vs full lining | BONUS | ☐ | |

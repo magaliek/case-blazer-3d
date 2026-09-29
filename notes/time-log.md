@@ -8,11 +8,12 @@ Research/reading/setup counts as its own type.
 |---|---|---|---|---|
 | 2026-09-25 | A | Learning Blender basics (navigation, edit mode, separate/join) | 5 | research |
 | 2026-09-28 | A | Separating, joining per category, renaming parts, lining (plus some more learning) | 5 | manual |
+| 2026-09-29 | A | Learning how UVs work, UV script (real-world scale, lengthwise stripes), materials script, export + compression, checking in Blender and glTF viewer, fixing the lining | 5 | code |
 
 ## Running totals
 | Part | Code h | Manual h | Research/setup h | Total h |
 |---|---|---|---|---|
-| A | 0 | 5 | 5 | 10 |
+| A | 5 | 5 | 5 | 15 |
 | B | | | | |
 | C | | | | |
 | D | | | | |
