@@ -17,5 +17,8 @@ Short entries are fine. The "what I changed" column is the important one.
 | 2026-09-29 | Claude | A | export.py + glTF-Transform command | Selection of parts only, export, optimize with webp and 2048 | Export failed because the .blend was saved in Edit Mode (added a mode guard). Optimizer merged parts (added --join false). Mesh was 1.4M triangles, added per-part Decimate ratios (body 0.1) |
 | 2026-09-29 | Claude | A | Fix for the lining showing through the back | Inset with a Displace modifier at export | First sign was wrong (-0.3 pushed the lining outside the body). Flipped to +0.3 |
 
+| 2026-10-01 | Claude | A | Tutor me through every step of Part A so I can redo it alone | Explanations of mesh/UV/units/export/decimation/lining/glTF Transform; hints for the RATIOS dict (I wrote the dict myself) | Nothing wrong found this time. Claude flagged that the committed export.py uses 0.1 on every part (notes say 0.1/0.25/0.4), that the GitHub README is still the empty template, and that manual-steps row 2 is misformatted. Claude checked the glTF Transform flags against its `--help` text instead of from memory |
+| 2026-10-01 | Claude | D (test) | Barebones page + small Python server to check blazer.glb on laptop and phone | model-viewer page and serve.py as written | My glb path had a typo (`//assets/`), fixed. Claude's min/max camera limits kept the camera stuck too close, removed them. The auto-rotate checkbox didn't work for me, removed it |
+
 ## Patterns noticed
 Claude's mistakes so far were confident claims about how Blender behaves (cube projection direction, what ambientCG publishes, which way the displace goes). Reading the code would not have caught them. Looking at the result did: side view, glTF viewer, inspect output.

@@ -68,7 +68,7 @@ Status: ☐ not started · ◐ in progress · ☑ done · ✗ skipped (say why i
 | | Item | Status |
 |---|---|---|
 | 1 | Folder layout matches brief | ☐ |
-| 2 | README lets someone else reproduce it | ☐ |
+| 2 | README lets someone else reproduce it | ☐ | README on GitHub is still the empty template: fill in requirements, section 1 commands, manual-steps table |
 | 3 | 30–60 s video, phone view included | ☐ |
 
 ## Cross-option tests (no choice breaks another)

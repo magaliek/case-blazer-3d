@@ -59,7 +59,20 @@ Dropped routes go straight into the report, so note WHY while you still remember
 - **Part:** A
 - **Problem:** Lapel edges look slightly ragged and the stripes wobble there, probably from decimation
 - **Options considered:** Collar ratio 0.4 → 0.7; body ratio 0.15
-- **Chosen:** Not done yet
+- **Chosen:** body 0.1, collar 0.4, left/right sleeve 0.25, lining 0.1
+- **Why:** Tuned by eye to get from 1.4M to about 245k triangles (4.28 MB, well under the 15 MB limit). The body is large and smooth, so it takes the strongest reduction. The collar is small and its lapel edges are the most visible, so it keeps more. Sleeves in between. Not tested systematically.
 - **Status:** open
+
+### 2026-10-01 – Per-part decimate ratios in a dict
+- **Part:** A
+- **Problem:** The committed export.py applies 0.1 to every part, but the notes say body 0.1, sleeves 0.25, collar 0.4. Someone running the repo would get a different .glb
+- **Chosen:** RATIOS dict in export.py (body 0.1, collar 0.4, left/right sleeve 0.25, lining 0.1), looked up by part name in the loop
+- **Why:** Matches what the notes say was exported, and the numbers sit in one place
+- **Status:** in progress (dict written, loop not yet updated and pushed)
+
+### 2026-10-01 – Open: optimize defaults that may bite in Part B/D
+- **Part:** B/D
+- **Problem:** Per `optimize --help`: `--palette` (merge materials) is on by default but only acts with 5+ unique material values, so it could merge materials once buttons and pockets are added. Geometry is meshopt-compressed by default, so the web viewer needs the meshopt decoder
+- **Status:** open, not tested yet
 
 ---
