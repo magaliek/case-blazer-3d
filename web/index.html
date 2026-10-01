@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GLB test</title>
+  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+  <style>
+    html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; background: #eee; }
+    model-viewer { width: 100%; height: 100%; --poster-color: transparent; }
+    #bar {
+      position: fixed; left: 8px; right: 8px; top: 8px; z-index: 10;
+      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+      background: rgba(255,255,255,.9); padding: 6px 8px; border-radius: 8px; font-size: 13px;
+    }
+    button { padding: 6px 10px; }
+    #status { flex: 1 1 100%; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <div id="bar">
+    <button id="reset">Reset view</button>
+    <span id="status">loading…</span>
+  </div>
+
+  <!-- change src here, or use ?model=/assets/other.glb in the URL -->
+  <model-viewer id="mv"
+    src="/assets/blazer.glb"
+    camera-controls
+    touch-action="pan-y"
+    shadow-intensity="1"
+    environment-image="neutral"
+    alt="blazer">
+  </model-viewer>
+
+  <script>
+    const mv = document.getElementById('mv');
+    const status = document.getElementById('status');
+    const q = new URLSearchParams(location.search).get('model');
+    if (q) mv.src = q;
+
+    const t0 = performance.now();
+    mv.addEventListener('progress', e => {
+      status.textContent = 'loading ' + Math.round(e.detail.totalProgress * 100) + '%';
+    });
+    mv.addEventListener('load', () => {
+      const secs = ((performance.now() - t0) / 1000).toFixed(2);
+      status.textContent = 'loaded in ' + secs + 's — ' + mv.src;
+    });
+    mv.addEventListener('error', e => {
+      status.textContent = 'ERROR: ' + (e.detail && (e.detail.sourceError?.message || e.detail.type) || 'unknown') + ' — ' + mv.src;
+    });
+
+    document.getElementById('reset').onclick = () => {
+      mv.cameraOrbit = 'auto auto auto';
+      mv.cameraTarget = 'auto auto auto';
+      mv.fieldOfView = 'auto';
+    };
+  </script>
+</body>
+</html>
