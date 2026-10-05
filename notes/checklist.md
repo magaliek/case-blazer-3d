@@ -15,11 +15,11 @@ Status: ☐ not started · ◐ in progress · ☑ done · ✗ skipped (say why i
 ## B – Option parts
 | | Item | Type | Status | Notes |
 |---|---|---|---|---|
-| B1 | Flap pocket | REQ | ☐ | |
-| B2 | Patch pocket | REQ | ☐ | |
+| B1 | Flap pocket | REQ | ◐ | Side pockets in the base model are flaps; not yet toggleable nodes |
+| B2 | Patch pocket | REQ | ◐ | Chest pocket in the base model is a patch pocket; same |
 | B3 | Pockets: no gaps / no clipping at 1 m | REQ | ☐ | |
-| B4 | 2-button closure, buttons + buttonholes placed right | REQ | ☐ | |
-| B5 | 3-button closure, buttons + buttonholes placed right | REQ | ☐ | |
+| B4 | 2-button closure, buttons + buttonholes placed right | REQ | ◐ | Inner pair and their holes; not yet toggleable |
+| B5 | 3-button closure, buttons + buttonholes placed right | REQ | ◐ | 3rd button and hole placed by place_3rd_button.py at z ≈ 104; x estimated, not measured; not yet toggleable |
 | B6 | Topstitching visible on added parts | REQ | ☐ | |
 | B7 | Lining covers inside, colour changeable | REQ | ◐ | Lining is its own part with its own colour material (placeholder red). Colour switching not done yet |
 | B8 | Sleeve buttons (0/2/4) | BONUS | ☐ | |

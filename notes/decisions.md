@@ -75,4 +75,12 @@ Dropped routes go straight into the report, so note WHY while you still remember
 - **Problem:** Per `optimize --help`: `--palette` (merge materials) is on by default but only acts with 5+ unique material values, so it could merge materials once buttons and pockets are added. Geometry is meshopt-compressed by default, so the web viewer needs the meshopt decoder
 - **Status:** open, not tested yet
 
+### 2026-10-05 – Closures: reuse the CLO buttons, add the 3rd by code
+- **Part:** B
+- **Problem:** Brief needs a 2-button and a 3-button closure. The base model's closure is double-breasted: 6 front buttons in two columns of 3, plus 3 per cuff, with a buttonhole opposite each
+- **Options considered:** Only hide/show the existing buttons; generate every button position in code; move a button by hand with snapping; copy one button and one hole and place a third by ray-cast
+- **Chosen:** Existing buttons and holes become separate named parts that the viewer shows or hides. The 3rd button and hole are added by place_3rd_button.py
+- **Why:** Hiding buttons only gives even counts (2, 4, 6), never 3. Placing by hand needs a manual tilt and isn't reproducible
+- **Status:** kept. x position of the 3rd button is estimated, not measured
+- **If dropped, why:** By hand with snapping: didn't work well and the tilt was hard. Placing the 3rd button above the top row (z = 131): the lapel is open there, so the ray hit the back panel
 ---
