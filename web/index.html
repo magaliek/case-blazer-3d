@@ -4,7 +4,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>GLB test</title>
-  <script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
   <style>
     html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; background: #eee; }
     model-viewer { width: 100%; height: 100%; --poster-color: transparent; }
@@ -16,46 +15,88 @@
     button { padding: 6px 10px; }
     #status { flex: 1 1 100%; word-break: break-all; }
   </style>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"
+    }
+  }
+  </script>
 </head>
-<body>
-  <div id="bar">
-    <button id="reset">Reset view</button>
-    <span id="status">loading…</span>
-  </div>
 
-  <!-- change src here, or use ?model=/assets/other.glb in the URL -->
-  <model-viewer id="mv"
-    src="/assets/blazer.glb"
-    camera-controls
-    touch-action="pan-y"
-    shadow-intensity="1"
-    environment-image="neutral"
-    alt="blazer">
-  </model-viewer>
 
-  <script>
-    const mv = document.getElementById('mv');
-    const status = document.getElementById('status');
-    const q = new URLSearchParams(location.search).get('model');
-    if (q) mv.src = q;
+  <script type="module">
+    import * as THREE from 'three';
+    import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+    import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-    const t0 = performance.now();
-    mv.addEventListener('progress', e => {
-      status.textContent = 'loading ' + Math.round(e.detail.totalProgress * 100) + '%';
-    });
-    mv.addEventListener('load', () => {
-      const secs = ((performance.now() - t0) / 1000).toFixed(2);
-      status.textContent = 'loaded in ' + secs + 's — ' + mv.src;
-    });
-    mv.addEventListener('error', e => {
-      status.textContent = 'ERROR: ' + (e.detail && (e.detail.sourceError?.message || e.detail.type) || 'unknown') + ' — ' + mv.src;
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xEDE8D0);
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const loader = new GLTFLoader();
+    loader.setMeshoptDecoder(MeshoptDecoder);
+
+    const AmbientLight = new THREE.AmbientLight( 0xffffff, 0.75 );
+    scene.add( AmbientLight );
+    
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    const rDom = renderer.domElement;
+    document.body.appendChild(rDom);
+
+    const controls = new OrbitControls( camera, rDom );
+    
+    renderer.setAnimationLoop(() => {
+      controls.update();
+      renderer.render( scene, camera );
     });
 
-    document.getElementById('reset').onclick = () => {
-      mv.cameraOrbit = 'auto auto auto';
-      mv.cameraTarget = 'auto auto auto';
-      mv.fieldOfView = 'auto';
-    };
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+
+    loader.load(
+      '/assets/blazer.glb',
+
+      function(gltf) {
+
+        const box = new THREE.Box3().setFromObject(gltf.scene);
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+        console.log(size, center);
+
+        controls.target.copy(center);
+        controls.minDistance = 0.5 * size.y;
+        controls.maxDistance = 4 * size.y;
+        controls.update();
+        camera.position.copy(center);
+        camera.position.z += 2.5 * size.y;
+        
+        camera.near = 0.01 * size.y;
+        camera.far = 10 * size.y;
+        camera.updateProjectionMatrix();
+
+
+        scene.add(gltf.scene);
+      },
+      
+      function(xhr) {
+        if (xhr.total > 0) {
+          const percentageCompleted = (xhr.loaded / xhr.total) * 100;
+          console.log( `Model is ${ Math.round( percentageCompleted ) }% loaded` );
+        } else {
+            console.log( `Downloaded ${ ( xhr.loaded / 1024 / 1024 ).toFixed( 2 ) } MB` );
+        }
+      },
+
+      function ( error ) {
+        console.error( 'An error happened:', error );
+    }
+
+    )
+    
   </script>
 </body>
 </html>
