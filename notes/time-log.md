@@ -13,6 +13,8 @@ Research/reading/setup counts as its own type.
 | 2026-10-05 | B | Learning ray-casting, coordinate spaces and matrices; inspecting the old buttons and pockets in blazer_previous.blend | 3 | research |
 | 2026-10-05 | B | Separating the closure buttons and holes into named objects | 1 | manual |
 | 2026-10-05 | B | place_3rd_button.py: 3rd closure button and hole placed by ray-cast, debugging | 1 | code |
+| 2026-10-07 | D | Learning the JS/three.js patterns for the viewer (state + apply(), loops, in vs of, async textures, Groups vs Meshes) | [3] | research |
+| 2026-10-07 | D | Viewer code: part toggles from a state object, fabric/lining swap with texture cache, debugging | [2] | code |
 
 ## Running totals
 | Part | Code h | Manual h | Research/setup h | Total h |
@@ -20,5 +22,5 @@ Research/reading/setup counts as its own type.
 | A | 5 | 5 | 5 | 15 |
 | B | 1 | 1 | 3 | 5 |
 | C | | | | |
-| D | | | | |
+| D | | 2 | 3 | 5 |
 | E | | | | |

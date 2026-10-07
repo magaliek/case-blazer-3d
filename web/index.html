@@ -40,7 +40,8 @@
     loader.setMeshoptDecoder(MeshoptDecoder);
 
     const AmbientLight = new THREE.AmbientLight( 0xffffff, 0.75 );
-    scene.add( AmbientLight );
+    const DirectionalLight = new THREE.DirectionalLight(0xffffff, 0.75)
+    scene.add( AmbientLight, DirectionalLight );
     
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -57,11 +58,12 @@
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
 
+    let model;
     loader.load(
       '/assets/blazer.glb',
 
       function(gltf) {
-
+        model = gltf.scene;
         const box = new THREE.Box3().setFromObject(gltf.scene);
         const size = box.getSize(new THREE.Vector3());
         const center = box.getCenter(new THREE.Vector3());
@@ -78,8 +80,12 @@
         camera.far = 10 * size.y;
         camera.updateProjectionMatrix();
 
+        model.traverse(o => console.log(o.type, o.name));
+        model.getObjectByName('left_pocket').children.forEach(c => console.log(c.name, c.material.name));
+        model.getObjectByName('right_pocket').children.forEach(c => console.log(c.name, c.material.name));
 
-        scene.add(gltf.scene);
+        scene.add(model);
+        apply();
       },
       
       function(xhr) {
@@ -92,10 +98,67 @@
       },
 
       function ( error ) {
-        console.error( 'An error happened:', error );
+        console.error( 'Error:', error );
     }
 
     )
+
+    const state = {buttons: 2, cuffs: true, flapPockets: 2, patchPocket: true, lining: '#228B22'};
+
+    const LOOKUP = {
+      buttons: { 0: [], 2: ['closure2_button'], 3: ['closure2_button', 'closure3_button'] },
+      cuffs: {false: [], true: ['cuff_buttons']},
+      flapPockets: { 0: [], 1: ['left_pocket'], 2: ['left_pocket', 'right_pocket'] },
+      patchPockets: {false: [], true: ['chest_pocket']}
+    };
+
+    const TOGGLEABLE = new Set(Object.values(LOOKUP).flatMap(g => Object.values(g).flat()));
+
+    const FABRICDICT = {body: 'wool', collar: 'wool', left_sleeve: 'wool', right_sleeve: 'wool', 
+                        lining: 'check', left_pocket: "check", right_pocket: "check", chest_pocket: "check"};
+
+    function apply() {
+      const on = new Set([...LOOKUP.buttons[state.buttons], ...LOOKUP.cuffs[state.cuffs], ...LOOKUP.flapPockets[state.flapPockets], ...LOOKUP.patchPockets[state.patchPocket]]);
+
+      for (const name of TOGGLEABLE) model.getObjectByName(name).visible = on.has(name);
+
+      for (const [part, fabric] of Object.entries(FABRICDICT)) setFabric(model.getObjectByName(part), {fabric, color: part === 'lining' ? state.lining : 0xffffff});
+    }
+
+    const FABRICS = [
+      { id: 'wool',   swatch: '/assets/Fabrics/Fabric031_2K-JPG_Color.jpg' },
+      { id: 'stripe', swatch: '/assets/Fabrics/Fabric072_2K-JPG_Color.jpg' },
+      { id: 'check',  swatch: '/assets/Fabrics/Fabric083_2K-JPG_Color.jpg' },
+    ];
+
+    async function setFabric(mesh, {color=0xffffff, fabric=null} = {}) {
+      const mat = clothMesh(mesh).material;
+      mat.color.set(color);
+
+      const url = FABRICS.find(f => f.id === fabric)?.swatch;
+      mat.map = url ? await getTexture(url) : null;
+      mat.needsUpdate = true;
+    }
+
+    function clothMesh(obj) {
+      if (obj.isMesh) return obj;
+      return obj.children.find(c => c.material.name === 'kruvaze_blazer_FRONT_2303');
+    }
+
+    const texLoader = new THREE.TextureLoader();
+    const texCache = new Map();
+
+    async function getTexture(url) {
+      if (!texCache.has(url)) {
+        const tex = await texLoader.loadAsync(url);
+        tex.flipY = false;
+        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+        texCache.set(url, tex);
+      }
+      return texCache.get(url);
+    }
     
   </script>
 </body>

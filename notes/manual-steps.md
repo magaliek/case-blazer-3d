@@ -15,3 +15,5 @@ No changes to geometry or UVs. No objects deleted.
 | 5 | 2026-10-05 | B | Separated the closure buttons and buttonholes and named them (e.g. top_left_closure_button, top_right_button_hole) | I originally had them merged into one object | Separate by Loose Parts, then name by position (x/z) in a script |
 
 | 6 | 2026-10-05 | B | Checked in Blender that the 3rd button sits on the cloth and isn't tilted wrong | Needs eyes | Render a close-up and compare |
+
+| 7 | 2026-10-07 | D | Checked toggles and fabrics in the browser | Needs eyes | Screenshot tests (Playwright) |

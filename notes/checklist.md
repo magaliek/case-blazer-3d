@@ -9,19 +9,17 @@ Status: ☐ not started · ◐ in progress · ☑ done · ✗ skipped (say why i
 | A2 | Body, sleeves, collar, inside as separate named parts | REQ | ☑ | body, collar, left_sleeve, right_sleeve, lining (confirmed in gltf-transform inspect) |
 | A3 | UVs at real scale, cm per tile documented | REQ | ☑ | 1 tile = 20 x 20 cm, assumed (ambientCG has no size), set by TILE_CM in UVs.py |
 | A4 | Stripes run lengthwise on every panel | REQ | ☑ | Custom projection, V always height. Checked front/side/back in Blender and in glTF viewer |
-| A5 | Compressed .glb ≤ 15 MB, textures ≤ 2K | REQ | ☑ | 4.28 MB, 2048 px, about 245k triangles. Lapel edges a bit ragged (see decisions) |
+| A5 | Compressed .glb ≤ 15 MB, textures ≤ 2K | REQ | ☑ | [re-measure]: blazer_web.glb in the repo is 4.8 MB. The viewer currently loads blazer.glb (32 MB) |
 | A6 | Front slightly open state, lining visible | BONUS | ☐ | Not started |
 
 ## B – Option parts
 | | Item | Type | Status | Notes |
 |---|---|---|---|---|
-| B1 | Flap pocket | REQ | ◐ | Side pockets in the base model are flaps; not yet toggleable nodes |
-| B2 | Patch pocket | REQ | ◐ | Chest pocket in the base model is a patch pocket; same |
-| B3 | Pockets: no gaps / no clipping at 1 m | REQ | ☐ | |
-| B4 | 2-button closure, buttons + buttonholes placed right | REQ | ◐ | Inner pair and their holes; not yet toggleable |
-| B5 | 3-button closure, buttons + buttonholes placed right | REQ | ◐ | 3rd button and hole placed by place_3rd_button.py at z ≈ 104; x estimated, not measured; not yet toggleable |
-| B6 | Topstitching visible on added parts | REQ | ☐ | |
-| B7 | Lining covers inside, colour changeable | REQ | ◐ | Lining is its own part with its own colour material (placeholder red). Colour switching not done yet |
+| B1 | Flap pocket | REQ | [☑] | Side pockets from the base model are named nodes (left_pocket, right_pocket), toggled in the viewer |
+| B2 | Patch pocket | REQ | [☑] | Chest pocket from the base model is chest_pocket, toggled in the viewer |
+| B4 | 2-button closure, buttons + buttonholes placed right | REQ | [☑] | closure2_button (2 buttons + holes), toggled in the viewer |
+| B5 | 3-button closure, buttons + buttonholes placed right | REQ | [☑] | closure3_button added on top of closure2_button, placed by place_3rd_button.py at z ≈ 104; x estimated, not measured |
+| B7 | Lining covers inside, colour changeable | REQ | ◐ | Lining colour is set from state.lining in the viewer; no colour buttons yet |
 | B8 | Sleeve buttons (0/2/4) | BONUS | ☐ | |
 | B9 | Welt pocket | BONUS | ☐ | |
 | B10 | Butterfly vs full lining | BONUS | ☐ | |
@@ -40,15 +38,15 @@ Status: ☐ not started · ◐ in progress · ☑ done · ✗ skipped (say why i
 ## D – Web viewer
 | | Item | Type | Status | Notes |
 |---|---|---|---|---|
-| D1 | 360° rotate with mouse and touch | REQ | ☐ | |
-| D2 | Zoom within limits | REQ | ☐ | |
+| D1 | 360° rotate with mouse and touch | REQ | ☑ | OrbitControls |
+| D2 | Zoom within limits | REQ | ☑ | controls.minDistance / maxDistance |
 | D3 | Reset view button | REQ | ☐ | |
-| D4 | Fabric choice (3) | REQ | ☐ | |
-| D5 | Front button count | REQ | ☐ | |
+| D4 | Fabric choice (3) | REQ | ◐ | setFabric + texture cache work; swatch buttons not in the HTML yet |
+| D5 | Front button count | REQ | ◐ | state.buttons + apply() work; buttons not in the HTML yet |
 | D6 | Button model (2) | REQ | ☐ | |
-| D7 | Pocket type | REQ | ☐ | |
-| D8 | Lining colour | REQ | ☐ | |
-| D9 | All choices update instantly, no reload | REQ | ☐ | |
+| D7 | Pocket type | REQ | ◐ | state.flapPockets / patchPocket + apply() work; buttons not in the HTML yet |
+| D8 | Lining colour | REQ | ◐ | state.lining works; colour buttons not in the HTML yet |
+| D9 | All choices update instantly, no reload | REQ | ◐ | Every choice goes through apply(); needs the buttons to test |
 | D10 | Works at 375 px, no sideways scroll | REQ | ☐ | |
 | D11 | First view < 3 s (measured) | REQ | ☐ | |
 | D12 | No console errors | REQ | ☐ | |

@@ -83,4 +83,42 @@ Dropped routes go straight into the report, so note WHY while you still remember
 - **Why:** Hiding buttons only gives even counts (2, 4, 6), never 3. Placing by hand needs a manual tilt and isn't reproducible
 - **Status:** kept. x position of the 3rd button is estimated, not measured
 - **If dropped, why:** By hand with snapping: didn't work well and the tilt was hard. Placing the 3rd button above the top row (z = 131): the lapel is open there, so the ray hit the back panel
+
+### 2026-10-07 – State + apply() for the viewer
+- **Part:** D
+- **Problem:** Options interact (3 buttons shows two nodes, pockets show one to two)
+- **Options considered:** A click handler per button that shows or hides nodes; one state object and one function that recomputes everything
+- **Chosen:** One `state` object, one `apply()` that sets every node's visibility from lookup tables
+- **Why:** No choice can leave a stale node behind, which is the "no choice breaks another" criterion
+- **Status:** kept
+- **If dropped, why:** Per-button handlers dropped: every handler has to set every node and breaks when options are added
+
+### 2026-10-07 – 3 buttons is cumulative
+- **Part:** B/D
+- **Problem:** How the 2-button and 3-button closures map onto the exported nodes
+- **Chosen:** 2 buttons shows closure2_button (2 buttons + holes). 3 buttons shows closure2_button + closure3_button
+- **Why:** closure3_button only holds the third button and hole (3662 vs 1831 vertices in the GLB)
+- **Status:** kept
+
+### 2026-10-07 – Fabric swap on the shared material, pockets by child
+- **Part:** D
+- **Problem:** Body, collar and sleeves share one material. left_pocket and right_pocket have 2 materials, so they load as Groups
+- **Chosen:** Swap `map` on the shared material. `clothMesh()` picks the pocket child by material name
+- **Why:** Material.001 is shared with the buttonholes, so it must not be changed
+- **Status:** kept. Open: pocket UVs are not in UVs.py, so fabric scale is wrong on the pockets
+
+### 2026-10-07 – CLO basicblazer_* maps not used in the viewer
+- **Part:** D
+- **Problem:** Unsure whether the PNGs in assets/textures are selectable textures
+- **Chosen:** Not used
+- **Why:** They are laid out on CLO's UVs, which UVs.py replaced. 4096 px (over the 2K limit). Not fabrics
+- **Status:** dropped
+- **If dropped, why:** Wrong UV layout, wrong size, not fabrics
+
+### 2026-10-07 – Open: colour x texture
+- **Part:** D
+- **Problem:** Three multiplies the colour with the image, so any non-white colour tints the fabric
+- **Options considered:** Keep the tint; force white when a texture is picked
+- **Chosen:** [decide]
+- **Status:** open
 ---
