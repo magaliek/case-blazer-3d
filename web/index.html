@@ -3,17 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>GLB test</title>
-  <style>
+  <title>Blazer Configuration</title>
+<style>
     html, body { margin: 0; height: 100%; font-family: system-ui, sans-serif; background: #eee; }
-    model-viewer { width: 100%; height: 100%; --poster-color: transparent; }
     #bar {
-      position: fixed; left: 8px; right: 8px; top: 8px; z-index: 10;
-      display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+      position: fixed; left: 8px; right: 8px; bottom: 8px; z-index: 10;
+      display: flex; gap: 8px 16px; align-items: center; flex-wrap: wrap;
+      max-height: 40vh; overflow-y: auto;
       background: rgba(255,255,255,.9); padding: 6px 8px; border-radius: 8px; font-size: 13px;
     }
+    .group { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
     button { padding: 6px 10px; }
-    #status { flex: 1 1 100%; word-break: break-all; }
+    button.active { background: #222; color: #fff; }
+    #liningPicker { -webkit-appearance: none; appearance: none; width: 32px; height: 32px; padding: 0; border: 2px solid #999; border-radius: 50%; background: none; cursor: pointer; }
+    #liningPicker::-webkit-color-swatch-wrapper { padding: 0; }
+    #liningPicker::-webkit-color-swatch { border: none; border-radius: 50%; }
+    #liningPicker::-moz-color-swatch { border: none; border-radius: 50%; }
   </style>
 
   <script type="importmap">
@@ -26,140 +31,39 @@
   </script>
 </head>
 
+<body>
+  <div id="bar">
+    <div class="group">Fabrics
+      <button data-option="fabric" data-value="wool">Wool fabric</button>
+      <button data-option="fabric" data-value="stripe">Stripe fabric</button>
+      <button data-option="fabric" data-value="check">Checkers fabric</button>
+    </div>
 
-  <script type="module">
-    import * as THREE from 'three';
-    import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
-    import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
-    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    <div class="group">Buttons
+      <button data-option="buttons" data-value="0">No buttons</button>
+      <button data-option="buttons" data-value="2">2 button closure</button>
+      <button data-option="buttons" data-value="3">3 button closure</button>
+    </div>
 
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0xEDE8D0);
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const loader = new GLTFLoader();
-    loader.setMeshoptDecoder(MeshoptDecoder);
+    <div class="group">Flap pockets
+      <button data-option="flapPockets" data-value="0">Off</button>
+      <button data-option="flapPockets" data-value="1">Only left side</button>
+      <button data-option="flapPockets" data-value="2">Only right side</button>
+      <button data-option="flapPockets" data-value="3">Both sides</button>
+    </div>
 
-    const AmbientLight = new THREE.AmbientLight( 0xffffff, 0.75 );
-    const DirectionalLight = new THREE.DirectionalLight(0xffffff, 0.75)
-    scene.add( AmbientLight, DirectionalLight );
-    
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    const rDom = renderer.domElement;
-    document.body.appendChild(rDom);
+    <div class="group">Chest patch pocket
+      <button data-option="patchPocket" data-value="true">On</button>
+      <button data-option="patchPocket" data-value="false">Off</button>
+    </div>
 
-    const controls = new OrbitControls( camera, rDom );
-    
-    renderer.setAnimationLoop(() => {
-      controls.update();
-      renderer.render( scene, camera );
-    });
+    <div class="group">Lining
+      <input type="color" id="liningPicker" value="#228B22">
+    </div>
 
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.08;
+    <button id="reset">Reset view</button>
+  </div>
 
-    let model;
-    loader.load(
-      '/assets/blazer.glb',
-
-      function(gltf) {
-        model = gltf.scene;
-        const box = new THREE.Box3().setFromObject(gltf.scene);
-        const size = box.getSize(new THREE.Vector3());
-        const center = box.getCenter(new THREE.Vector3());
-        console.log(size, center);
-
-        controls.target.copy(center);
-        controls.minDistance = 0.5 * size.y;
-        controls.maxDistance = 4 * size.y;
-        controls.update();
-        camera.position.copy(center);
-        camera.position.z += 2.5 * size.y;
-        
-        camera.near = 0.01 * size.y;
-        camera.far = 10 * size.y;
-        camera.updateProjectionMatrix();
-
-        model.traverse(o => console.log(o.type, o.name));
-        model.getObjectByName('left_pocket').children.forEach(c => console.log(c.name, c.material.name));
-        model.getObjectByName('right_pocket').children.forEach(c => console.log(c.name, c.material.name));
-
-        scene.add(model);
-        apply();
-      },
-      
-      function(xhr) {
-        if (xhr.total > 0) {
-          const percentageCompleted = (xhr.loaded / xhr.total) * 100;
-          console.log( `Model is ${ Math.round( percentageCompleted ) }% loaded` );
-        } else {
-            console.log( `Downloaded ${ ( xhr.loaded / 1024 / 1024 ).toFixed( 2 ) } MB` );
-        }
-      },
-
-      function ( error ) {
-        console.error( 'Error:', error );
-    }
-
-    )
-
-    const state = {buttons: 2, cuffs: true, flapPockets: 2, patchPocket: true, lining: '#228B22'};
-
-    const LOOKUP = {
-      buttons: { 0: [], 2: ['closure2_button'], 3: ['closure2_button', 'closure3_button'] },
-      cuffs: {false: [], true: ['cuff_buttons']},
-      flapPockets: { 0: [], 1: ['left_pocket'], 2: ['left_pocket', 'right_pocket'] },
-      patchPockets: {false: [], true: ['chest_pocket']}
-    };
-
-    const TOGGLEABLE = new Set(Object.values(LOOKUP).flatMap(g => Object.values(g).flat()));
-
-    const FABRICDICT = {body: 'wool', collar: 'wool', left_sleeve: 'wool', right_sleeve: 'wool', 
-                        lining: 'check', left_pocket: "check", right_pocket: "check", chest_pocket: "check"};
-
-    function apply() {
-      const on = new Set([...LOOKUP.buttons[state.buttons], ...LOOKUP.cuffs[state.cuffs], ...LOOKUP.flapPockets[state.flapPockets], ...LOOKUP.patchPockets[state.patchPocket]]);
-
-      for (const name of TOGGLEABLE) model.getObjectByName(name).visible = on.has(name);
-
-      for (const [part, fabric] of Object.entries(FABRICDICT)) setFabric(model.getObjectByName(part), {fabric, color: part === 'lining' ? state.lining : 0xffffff});
-    }
-
-    const FABRICS = [
-      { id: 'wool',   swatch: '/assets/Fabrics/Fabric031_2K-JPG_Color.jpg' },
-      { id: 'stripe', swatch: '/assets/Fabrics/Fabric072_2K-JPG_Color.jpg' },
-      { id: 'check',  swatch: '/assets/Fabrics/Fabric083_2K-JPG_Color.jpg' },
-    ];
-
-    async function setFabric(mesh, {color=0xffffff, fabric=null} = {}) {
-      const mat = clothMesh(mesh).material;
-      mat.color.set(color);
-
-      const url = FABRICS.find(f => f.id === fabric)?.swatch;
-      mat.map = url ? await getTexture(url) : null;
-      mat.needsUpdate = true;
-    }
-
-    function clothMesh(obj) {
-      if (obj.isMesh) return obj;
-      return obj.children.find(c => c.material.name === 'kruvaze_blazer_FRONT_2303');
-    }
-
-    const texLoader = new THREE.TextureLoader();
-    const texCache = new Map();
-
-    async function getTexture(url) {
-      if (!texCache.has(url)) {
-        const tex = await texLoader.loadAsync(url);
-        tex.flipY = false;
-        tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
-        tex.colorSpace = THREE.SRGBColorSpace;
-        tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
-        texCache.set(url, tex);
-      }
-      return texCache.get(url);
-    }
-    
-  </script>
+  <script type="module" src="main.js"></script>
 </body>
 </html>
