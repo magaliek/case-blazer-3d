@@ -119,6 +119,40 @@ Dropped routes go straight into the report, so note WHY while you still remember
 - **Part:** D
 - **Problem:** Three multiplies the colour with the image, so any non-white colour tints the fabric
 - **Options considered:** Keep the tint; force white when a texture is picked
-- **Chosen:** [decide]
-- **Status:** open
+- **Chosen:** Lining is a flat colour (see 2026-10-09). Cloth parts always use white, so only the lining is coloured
+- **Status:** resolved
+
+### 2026-10-09 – Option buttons driven by data attributes
+- **Part:** D
+- **Problem:** Five option groups, and every new option would need its own click handler
+- **Options considered:** One handler per button; one loop that reads data-option / data-value from the HTML
+- **Chosen:** Buttons carry data-option (the state key) and data-value. One loop sets state and calls apply(). toValue() turns the strings into numbers and booleans
+- **Why:** Adding an option only means adding HTML. It also keeps the "state + apply()" rule from 10-07
+- **Status:** kept
+- **If dropped, why:** Per-button handlers: repeated code for every button
+
+### 2026-10-09 – Lining: flat colour from a picker, no texture
+- **Part:** D
+- **Problem:** Closes the open "colour x texture" item for the lining. I tried the lining in CLOTH_PARTS so it got fabric and colour
+- **Options considered:** Fabric texture × colour; flat colour only; four preset swatches
+- **Chosen:** Native colour picker, flat colour (fabric: null in setFabric)
+- **Why:** Colour multiplies the texture, so on dark fabrics a bright colour came out as a dark, muddy shade (pink on the dark check looked maroon). Looked ugly. The picker allows any colour and needs no list
+- **Status:** kept. The cloth parts stay white, so they are not tinted
+- **If dropped, why:** Texture × colour: muddy. Swatches: fixed list, replaced by the picker
+
+### 2026-10-09 – Reset view needs damping off for the call
+- **Part:** D
+- **Problem:** With damping on, controls.reset() put the camera back, but leftover drag inertia kept moving it afterwards (it ended up well off its start position in a test)
+- **Chosen:** controls.saveState() once after the camera is placed. The button sets enableDamping = false, calls update(), reset(), then turns damping back on
+- **Why:** update() with damping off uses up the leftover spin before the reset
+- **Status:** kept
+
+### 2026-10-09 – Large files: Git LFS for the .blend
+- **Part:** delivery
+- **Problem:** blazer_3_closure.blend is 103.1 MiB. GitHub blocks files over 100 MiB
+- **Options considered:** Lossless Compress in Blender (was already on); stripping unused data (not tried); Git LFS; GitHub Release or Drive link
+- **Chosen:** Git LFS for *.blend. The glbs (30.8 and 4.6 MB) go in normally
+- **Why:** The file stays exactly as it is. Free quota is enough
+- **Status:** kept. Anyone who pulls needs git lfs installed
+
 ---

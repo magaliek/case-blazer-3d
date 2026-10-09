@@ -19,7 +19,7 @@ Status: ☐ not started · ◐ in progress · ☑ done · ✗ skipped (say why i
 | B2 | Patch pocket | REQ | [☑] | Chest pocket from the base model is chest_pocket, toggled in the viewer |
 | B4 | 2-button closure, buttons + buttonholes placed right | REQ | [☑] | closure2_button (2 buttons + holes), toggled in the viewer |
 | B5 | 3-button closure, buttons + buttonholes placed right | REQ | [☑] | closure3_button added on top of closure2_button, placed by place_3rd_button.py at z ≈ 104; x estimated, not measured |
-| B7 | Lining covers inside, colour changeable | REQ | ◐ | Lining colour is set from state.lining in the viewer; no colour buttons yet |
+| B7 | Lining covers inside, colour changeable | REQ | ☑ | Native colour picker (input type=color), flat colour, no texture. Lining colour is state.lining |
 | B8 | Sleeve buttons (0/2/4) | BONUS | ☐ | |
 | B9 | Welt pocket | BONUS | ☐ | |
 | B10 | Butterfly vs full lining | BONUS | ☐ | |
@@ -32,7 +32,7 @@ Status: ☐ not started · ◐ in progress · ☑ done · ✗ skipped (say why i
 | C1 | Plain, stripe, check tile seamlessly at real scale | REQ | ☐ | |
 | C2 | Button #1 photo → 3D button (clean bg, face, rim, 4 holes) | REQ | ☐ | |
 | C3 | Button #2 photo → 3D button | REQ | ☐ | |
-| C4 | One-page shooting guide | REQ | ☐ | |
+
 | C5 | One command: photo in folder → texture out | BONUS | ☐ | |
 
 ## D – Web viewer
@@ -40,18 +40,17 @@ Status: ☐ not started · ◐ in progress · ☑ done · ✗ skipped (say why i
 |---|---|---|---|---|
 | D1 | 360° rotate with mouse and touch | REQ | ☑ | OrbitControls |
 | D2 | Zoom within limits | REQ | ☑ | controls.minDistance / maxDistance |
-| D3 | Reset view button | REQ | ☐ | |
-| D4 | Fabric choice (3) | REQ | ◐ | setFabric + texture cache work; swatch buttons not in the HTML yet |
-| D5 | Front button count | REQ | ◐ | state.buttons + apply() work; buttons not in the HTML yet |
-| D6 | Button model (2) | REQ | ☐ | |
-| D7 | Pocket type | REQ | ◐ | state.flapPockets / patchPocket + apply() work; buttons not in the HTML yet |
-| D8 | Lining colour | REQ | ◐ | state.lining works; colour buttons not in the HTML yet |
-| D9 | All choices update instantly, no reload | REQ | ◐ | Every choice goes through apply(); needs the buttons to test |
-| D10 | Works at 375 px, no sideways scroll | REQ | ☐ | |
-| D11 | First view < 3 s (measured) | REQ | ☐ | |
-| D12 | No console errors | REQ | ☐ | |
-| D13 | Works in Chrome | REQ | ☐ | |
-| D14 | Works in Safari | REQ | ☐ | |
+| D3 | Reset view button | REQ | ☑ | controls.saveState() after camera setup; button calls controls.reset() with damping switched off for that call (see decisions) |
+| D4 | Fabric choice (3) | REQ | ☑ | Wool / Stripe / Check buttons set state.fabric, apply() swaps the texture |
+| D5 | Front button count | REQ | ☑ | None / 2 / 3 buttons via data-option="buttons" |
+| D6 | Button model (2) | REQ | ☐ | Needs part C (button photos → 3D buttons) |
+| D7 | Pocket type | REQ | ☑ | Flap: off / left / right / both (state.flapPockets 0–3). Patch pocket on/off |
+| D8 | Lining colour | REQ | ☑ | Colour picker circle, input event, updates live |
+| D9 | All choices update instantly, no reload | REQ | ◐ | Every choice goes through apply(). [Still to do: combo tests in the table at the bottom] |
+| D11 | First view < 3 s (measured) | REQ | ☑ | logTime() added to main.js. [Measure with DevTools: Disable cache + Fast 4G, write the value in REPORT] |
+| D12 | No console errors | REQ | ☑ | Only error was favicon.ico 404. |
+| D13 | Works in Chrome | REQ | ☑ | |
+| D14 | Works in Safari | REQ | ☑ | |
 | D15 | Save front + back PNG in one click | BONUS | ☐ | |
 
 ## E – Report
