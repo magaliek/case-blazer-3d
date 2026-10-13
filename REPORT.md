@@ -77,6 +77,8 @@ What I had to fix, from `notes/ai-log.md`:
 - **Part B:** the first version of `place_3rd_button.py` put the button on the back of the jacket, and the x positions were guesses, not measurements.
 - **Part D:** Python-style loops in JavaScript (`.items()`, `in` instead of `of`), a spelling mismatch (TOOGLEABLE / TOGGLEABLE), relative texture paths (404), pockets loading as Groups, and the lining colour being overwritten by the white default.
 - **Bugs I only knew about because the code was run:** the reset-view drift after a drag (damping inertia) and a `getElementsById` typo were found by Claude running my code, not by me reading it. I found some myself, like the `mesh` being None in the UV script and the `//assets/` typo in the glb path.
+
+- **Buttons:** the button code (`button_prep.py` and `button_build.py` in Part C, `web/buttons.js` and the button part of `main.js` in the viewer) was written by Claude, and I studied it to understand it.
 ----
 - **This report** was drafted with Claude from the notes folder, and I corrected it.
 
@@ -118,7 +120,6 @@ What I had to fix, from `notes/ai-log.md`:
 - The three fabrics are the ambientCG tiles, which tile seamlessly by design.
 
 **Doesn't work / open**
-- The buttons aren't in the viewer yet, so there is no "button model" choice (D6). The jacket still shows the CLO buttons.
 - The gold button photo is small (about 214 px across), so the face texture is low resolution.
 - There is no photo → fabric texture path, so the "simulate a phone photo of a fabric" case isn't covered. Also missing: the one-page shooting guide (decided not to make it) and the one-command bonus.
 
@@ -127,7 +128,7 @@ What I had to fix, from `notes/ai-log.md`:
 - 360° rotation with mouse and touch, zoom within limits, reset view button (damping is switched off for the call, otherwise leftover inertia moved the camera).
 - Choices that update at once without reloading: fabric (wool, stripe, check), front buttons (none, 2, 3), flap pockets (off, left, right, both), chest pocket on/off, lining colour (colour picker).
 - Checked by hand in Chrome and Safari.
-
+- Choices that update at once without reloading: fabric (wool, stripe, check), front buttons (none, 2, 3), button model (gold, silver), flap pockets (off, left, right, both), chest pocket on/off, lining colour (colour picker).
 **Doesn't work / open**
 ------
 - **First view time isn't measured.** `logTime()` in `main.js` prints the time, but I haven't written the value down. It is probably over 3 seconds: the page loads the 32.3 MB `.glb` plus a 5–7 MB fabric JPG, and at roughly 9 Mbit/s (Chrome's Fast 4G) that is already more than 30 seconds. That is arithmetic, not a measurement. The fix is the compressed `.glb` and WebP textures.
