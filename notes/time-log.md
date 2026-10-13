@@ -20,11 +20,16 @@ Research/reading/setup counts as its own type.
 | 2026-10-09 | D | Timing log for first view, favicon 404 | [2] | code |
 | 2026-10-09 | – | Pushing the 103 MiB blend: Git LFS, .gitignore | [0:30] | setup |
 
+| 2026-10-12 | C | Photo → button: prep script (background removal, face texture, hole detection) and Blender build script | [h] | code |
+| 2026-10-12 | C | Fixing the cutout circle (minEnclosingCircle), Blender path error, material and UV bugs | [2] | code |
+| 2026-10-13 | C | Second button (silver), checking both in a glb viewer | [0:30] | manual |
+| 2026-10-12 to 10-13 | C | Studying the button scripts line by line (OpenCV steps, Blender spin profile, Boolean, UVs, glb export) until I could explain each part myself | [2] | study |
+
 ## Running totals
 | Part | Code h | Manual h | Research/setup h | Total h |
 |---|---|---|---|---|
 | A | [5] | [5] | [5] | [15] |
 | B | [1] | [1] | [3] | [5] |
-| C | | | | |
+| C | [1] | [0:30] | [2] | [3:30] |
 | D | | [6] | [3:30] | [9:30] |
-| E | | | | |
+| E | | [0] | [1] | [1] |

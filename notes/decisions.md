@@ -155,4 +155,29 @@ Dropped routes go straight into the report, so note WHY while you still remember
 - **Why:** The file stays exactly as it is. Free quota is enough
 - **Status:** kept. Anyone who pulls needs git lfs installed
 
+### 2026-10-12 – Button cutout: enclosing circle instead of area or lightness
+- **Part:** C
+- **Problem:** The first cutout cut off the bottom-left of the gold button. The shiny rim there looked like paper, and the dark part of the rim was as dark as the shadow.
+- **Options considered:** Radius from the area of the mask; a lightness rule to include the bright and dark rim; cv2.minEnclosingCircle on the outline
+- **Chosen:** cv2.minEnclosingCircle on the outline
+- **Why:** Lightness did not work. The shadow is as dark as the rim, so the rule cannot tell them apart. The enclosing circle only needs the outline, so lighting does not matter
+- **Status:** kept. Works on both buttons
+
+### 2026-10-12 – Button shape is a hard-coded profile
+- **Part:** C
+- **Problem:** The photo gives the face. It does not give the side profile or the thickness.
+- **Chosen:** A fixed PROFILE list (rim, dish, thickness 0.14 × diameter), spun 64 steps, holes cut with a Boolean
+- **Why:** Simple and the same for every button. The numbers are estimated by eye, not measured from a real button
+- **Status:** kept. Known limit: every button gets the same profile
+
+### 2026-10-13 – Diameter is an input, not detected
+- **Part:** C
+- **Problem:** A photo has no real-world size.
+- **Chosen:** Pass `diameter_mm` on the command line and store it in the JSON. [Both buttons use 22 mm as a placeholder / measured __ and __ mm]
+- **Status:** [open until measured]
+
+### 2026-10-13 – Shooting guide
+- **Part:** C
+- **Chosen:** [skipped it]
+- **Why:** I used images from the internet. I didn't include it as it didn't feel particularly relevant or important for the completion of this task, and didn't feel included in the learning curve.
 ---

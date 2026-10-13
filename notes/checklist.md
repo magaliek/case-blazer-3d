@@ -29,11 +29,10 @@ Status: ☐ not started · ◐ in progress · ☑ done · ✗ skipped (say why i
 ## C – Photo to asset
 | | Item | Type | Status | Notes |
 |---|---|---|---|---|
-| C1 | Plain, stripe, check tile seamlessly at real scale | REQ | ☐ | |
-| C2 | Button #1 photo → 3D button (clean bg, face, rim, 4 holes) | REQ | ☐ | |
-| C3 | Button #2 photo → 3D button | REQ | ☐ | |
+| C1 | Plain, stripe, check tile seamlessly at real scale | REQ | ◐ | Looks seamless to me by eye. [Not checked at a close zoom / with a tile-edge test] |
+| C2 | Button #1 photo → 3D button (clean bg, face, rim, 4 holes) | REQ | ☑ | gold_button.glb. Checked in a glb viewer. Diameter 22 mm (placeholder, [measured: __ mm]) |
+| C3 | Button #2 photo → 3D button | REQ | ☑ | silver_button.glb. Same script, only the photo and name changed. Checked in a glb viewer |
 
-| C5 | One command: photo in folder → texture out | BONUS | ☐ | |
 
 ## D – Web viewer
 | | Item | Type | Status | Notes |

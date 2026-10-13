@@ -19,3 +19,7 @@ No changes to geometry or UVs. No objects deleted.
 | 7 | 2026-10-07 | D | Checked toggles and fabrics in the browser | Needs eyes | Screenshot tests (Playwright) |
 
 | 8 | 2026-10-09 | D | Clicked through every option and the colour picker, checked reset view after rotating, read the console | Needs eyes | Screenshot tests (Playwright), same as row 7 |
+
+| 9 | 2026-10-13 | C | Looked at both button .glb files in a glb viewer (face, rim, holes, thickness) | Needs eyes | Render a front and side image with a script and compare |
+
+| 10 | 2026-10-13 | C | [Measure the real button diameters / photograph the buttons] | Physical object | Not scriptable |

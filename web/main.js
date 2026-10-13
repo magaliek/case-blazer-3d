@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {MeshoptDecoder} from 'three/addons/libs/meshopt_decoder.module.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { findButtons, placeButton } from './buttons.js';
 
 
 function logTime(label) {
@@ -64,6 +65,7 @@ loader.load(
     scene.add(model);
     requestAnimationFrame(() => logTime('Jacket on screen'));
     apply();
+    setupButtons().catch(console.error);
     },
     
     function(xhr) {
@@ -81,7 +83,7 @@ loader.load(
 
 )
 
-const state = {buttons: 2, cuffs: true, flapPockets: 2, patchPocket: true, lining: '#228B22', fabric: 'wool'};
+const state = {buttons: 2, buttonModel: 'gold', cuffs: true, flapPockets: 2, patchPocket: true, lining: '#228B22', fabric: 'wool'};
 
 const LOOKUP = {
     buttons: { 0: [], 2: ['closure2_button'], 3: ['closure2_button', 'closure3_button'] },
@@ -100,6 +102,10 @@ function apply() {
 
     for (const name of TOGGLEABLE) model.getObjectByName(name).visible = on.has(name);
 
+    for (const spot of buttonSpots) {
+        for (const id in spot.copies) spot.copies[id].visible = on.has(spot.owner) && state.buttonModel === id;
+    }
+
     for (const part of CLOTH_PARTS) setFabric(model.getObjectByName(part), {fabric: state.fabric});
     setFabric(model.getObjectByName('lining'), {color: state.lining});
 }
@@ -109,6 +115,44 @@ const FABRICS = [
     { id: 'stripe', swatch: '/assets/Fabrics/Fabric072_2K-JPG_Color.jpg' },
     { id: 'check',  swatch: '/assets/Fabrics/Fabric083_2K-JPG_Color.jpg' },
 ];
+
+const BUTTON_FILES = {
+    gold:   '/assets/buttons/gold_button.glb',
+    silver: '/assets/buttons/silver_button.glb',
+};
+const buttonSpots = [];   // { owner: 'closure2_button', copies: { gold: ..., silver: ... } }
+
+async function setupButtons() {
+    const templates = {};
+    for (const [id, url] of Object.entries(BUTTON_FILES)) {
+        templates[id] = (await loader.loadAsync(url)).scene;
+    }
+
+    const sleeves = [model.getObjectByName('left_sleeve'), model.getObjectByName('right_sleeve')];
+    const SOURCES = [
+        { owner: 'closure2_button', material: 'Material500086', facing: new THREE.Vector3(0, 0, 1) },
+        { owner: 'closure3_button', material: 'Material500086', facing: new THREE.Vector3(0, 0, 1) },
+        { owner: 'cuff_buttons',    material: 'Material2583',    facing: sleeves },
+    ];
+
+    model.updateMatrixWorld(true);
+    for (const src of SOURCES) {
+        const node = model.getObjectByName(src.owner);
+        const mesh = node.isMesh ? node : node.children.find(c => c.material?.name === src.material);
+
+        for (const spot of findButtons(mesh, src.facing)) {
+            const copies = {};
+            for (const id in templates) {
+                copies[id] = placeButton(templates[id], spot);
+                model.add(copies[id]);
+            }
+            buttonSpots.push({ owner: src.owner, copies });
+        }
+        mesh.material.visible = false;   // hides the CLO buttons only; the buttonholes are another material
+    }
+    console.log('button spots:', buttonSpots.length);   // should be 9
+    apply();
+}
 
 let fabricLogged = false;
 async function setFabric(mesh, {color=0xffffff, fabric=null} = {}) {
