@@ -38,10 +38,8 @@ biggest = 1 + np.argmax(stats[1:, cv2.CC_STAT_AREA])
 blob = np.uint8(labels == biggest) * 255
 contours, _ = cv2.findContours(blob, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 outline = max(contours, key=cv2.contourArea)
-moments = cv2.moments(outline)
-cx = moments['m10'] / moments['m00']
-cy = moments['m01'] / moments['m00']
-radius = float(np.sqrt(cv2.contourArea(outline) / np.pi))
+
+(cx, cy), radius = cv2.minEnclosingCircle(outline)
 
 yy, xx = np.mgrid[:h, :w]
 inner = (xx - cx) ** 2 + (yy - cy) ** 2 < (0.6 * radius) ** 2
@@ -62,4 +60,30 @@ if len(found) != 4:
     sys.exit(f'Expected 4 holes, found {len(found)}. Check debug image / lighting.')
 
 
-#unfinished
+holes = [{'x': round((hx - cx) / radius, 4),
+          'y': round(-(hy - cy) / radius, 4),
+          'r': round(float(np.sqrt(area / np.pi)) / radius, 4)}
+         for area, hx, hy in found]
+
+scale = FACE_SIZE / (2 * radius)
+affine = np.float32([[scale, 0, -scale * (cx - radius)],
+                     [0, scale, -scale * (cy - radius)]])
+face = cv2.warpAffine(img, affine, (FACE_SIZE, FACE_SIZE),
+                      flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+alpha = np.zeros((FACE_SIZE, FACE_SIZE), np.uint8)
+cv2.circle(alpha, (FACE_SIZE // 2, FACE_SIZE // 2), FACE_SIZE // 2, 255, -1)
+cv2.imwrite(str(OUT_DIR / f'{NAME}_face.png'), cv2.merge([*cv2.split(face), alpha]))
+
+info = {'name': NAME, 'diameter_mm': DIAMETER_MM, 'photo_radius_px': round(radius, 1), 'holes': holes}
+(OUT_DIR / f'{NAME}.json').write_text(json.dumps(info, indent=2))
+
+debug = img.copy()
+cv2.circle(debug, (int(cx), int(cy)), int(radius), (255, 0, 0), 2)
+for area, hx, hy in found:
+    cv2.circle(debug, (int(hx), int(hy)), int(np.sqrt(area / np.pi)), (0, 0, 255), 2)
+cv2.imwrite(str(OUT_DIR / f'{NAME}_debug.png'), debug)
+
+print(f'Button centre ({cx:.0f}, {cy:.0f}) px, radius {radius:.0f} px')
+print(f'Holes found: {len(holes)}')
+print(f'Wrote {OUT_DIR}/{NAME}_face.png, {NAME}.json, {NAME}_debug.png')
+
